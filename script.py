@@ -26,7 +26,6 @@ def first_pass( commands ):
             name = command['args'][0]
         elif command['op'] == 'frames':
             num_frames = command['args'][0]
-
     return (name, num_frames)
 
 """======== second_pass( commands ) ==========
@@ -49,11 +48,13 @@ def first_pass( commands ):
 def second_pass( commands, num_frames ):
     frames = [{} for i in range(int(num_frames)) ]
     for command in commands:
-        print(command)
+        #print(command)
         if command['op']=="set":
             knob=command['knob']
             args = command['args']
-            init=args[0]
+            print(args)
+            #sinit=args[1]
+            #print(knob, args, init)
         if command['op'] == "vary":
             knob = command['knob']
             args = command['args']
@@ -74,7 +75,7 @@ def run(filename):
 
     if p:
         (commands, symbols) = p
-        print(p)
+        #print(p)
     else:
         print "Parsing failed."
         return
@@ -85,8 +86,8 @@ def run(filename):
     ambient = [50,
                50,
                50]
-    light = [[0.5,
-              0.75,
+    light = [[0,
+              0,
               1],
              [255,
               255,
@@ -120,12 +121,12 @@ def run(filename):
             args = command['args']
             knob_value = 1
             if c=='light':
+                add_light(light, args[0],args[1],args[2],args[3],args[4],args[5])
+            elif c=='mesh':
+                if command['constants']:
+                    reflect=command['constants']
                 pass
-                #add_light(args[0],args[1],args[2],args[3],args[4],args[5])
-            if c=='set':
-                pass
-                #symbols[command['knob']]=args[0]
-            if c == 'box':
+            elif c == 'box':
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,args[0], args[1], args[2],args[3], args[4], args[5])

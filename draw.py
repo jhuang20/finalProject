@@ -75,7 +75,9 @@ def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0)
     add_point(polygons, x1, y1, z1)
     add_point(polygons, x2, y2, z2)
-
+def add_light(light, r,g,b,x,y,z):
+    light.append([r,g,b],[x,y,z])
+    print(light)
 def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect):
     if len(polygons) < 2:
         print 'Need at least 3 points to draw'
