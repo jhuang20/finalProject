@@ -66,16 +66,17 @@ def second_pass( commands, num_frames ):
 
     return frames
 
-
 def run(filename):
     """
     This function runs an mdl script
     """
     p = mdl.parseFile(filename)
-
+    lights={}
     if p:
         (commands, symbols) = p
         #print(p)
+        #print(commands)
+        #print(symbols)
     else:
         print "Parsing failed."
         return
@@ -99,9 +100,14 @@ def run(filename):
                           'green': [0.2, 0.5, 0.5],
                           'blue': [0.2, 0.5, 0.5]}]
     reflect = '.white'
-
+    lights={}
+    for cmd in symbols:
+        if symbols[cmd][0]=='light':
+            lights[cmd]=symbols[cmd][1]
     (name, num_frames) = first_pass(commands)
     frames = second_pass(commands, num_frames)
+    (lights, ambient)=lights,[255,255,255]
+    print(lights)
     i = 0
     for frame in frames:
         symbols.update(frame)
@@ -120,18 +126,18 @@ def run(filename):
             c = command['op']
             args = command['args']
             knob_value = 1
-            if c=='light':
-                add_light(light, args[0],args[1],args[2],args[3],args[4],args[5])
-            elif c=='mesh':
+            if c=='mesh':
+                makeMesh(tmp,args[0])
+                matrix_mult( stack[-1], tmp )
                 if command['constants']:
                     reflect=command['constants']
-                pass
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
             elif c == 'box':
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,args[0], args[1], args[2],args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'sphere':
@@ -140,7 +146,7 @@ def run(filename):
                 add_sphere(tmp,
                                args[0], args[1], args[2], args[3], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'torus':
@@ -148,7 +154,7 @@ def run(filename):
                     reflect = command['constants']
                 add_torus(tmp,args[0], args[1], args[2], args[3], args[4], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, light, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':
