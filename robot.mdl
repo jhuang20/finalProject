@@ -1,6 +1,6 @@
 constants shiny_purple 0.2 0.3 0.7 0.0 0.0 0.0 0.0 0.3 0.7
 constants matte_purple 0.2 0.7 0.3 0.0 0.0 0.0 0.0 0.7 0.3
 light l0 200 10 40 40 40 40
-mesh shiny_purple :teapot.obj
+mesh matte_purple :teapot
 display
 save robot.png

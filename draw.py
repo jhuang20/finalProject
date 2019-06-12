@@ -76,13 +76,34 @@ def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x1, y1, z1)
     add_point(polygons, x2, y2, z2)
 def makeMesh(polygons,meshFile):
-    r=open(meshfile.strip(":"),'r')
+    print(meshFile)
+    r=open(meshFile+".obj",'r')
     a=r.readlines()
+    r.close()
+    temp=[]
+    masterCoord=[]
     counter=0
-    while counter<a:
-        if f in a[counter]: #triangle
-            inst=f.split(" ")
-            init=int(inst[1])
+    while counter<len(a):
+        if "v" in a[counter]: #polygons
+            xyz=[]
+            inst=a[counter].split(" ")
+            for coordinate in inst[1:]:
+                xyz.append(float(coordinate))
+            masterCoord.append(xyz) #adds coordinate to coordinate list
+        elif "f" in a[counter]:#individual
+            poly=[]
+            inst=a[counter].split(" ")
+            for sort_sys in inst[1:]:
+                poly.append(int(sort_sys)-1)
+            temp.append(poly)
+        counter+=1
+    for polygon in temp:
+        print(polygon)
+        p0=masterCoord[polygon[0]]
+        p1=masterCoord[polygon[1]]
+        p2=masterCoord[polygon[2]]
+        add_polygon(polygons,p0[0], p0[1],p0[2], p1[0], p1[1], p1[2], p2[0],p2[1],p2[2])
+
 def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect):
     if len(polygons) < 2:
         print 'Need at least 3 points to draw'

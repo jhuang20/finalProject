@@ -48,7 +48,7 @@ def first_pass( commands ):
 def second_pass( commands, num_frames ):
     frames = [{} for i in range(int(num_frames)) ]
     for command in commands:
-        #print(command)
+        print(command)
         if command['op']=="set":
             knob=command['knob']
             args = command['args']
@@ -74,6 +74,7 @@ def run(filename):
     lights={}
     if p:
         (commands, symbols) = p
+        #print(p)
         #print(p)
         #print(commands)
         #print(symbols)
@@ -107,7 +108,7 @@ def run(filename):
     (name, num_frames) = first_pass(commands)
     frames = second_pass(commands, num_frames)
     (lights, ambient)=lights,[255,255,255]
-    print(lights)
+    #print(lights)
     i = 0
     for frame in frames:
         symbols.update(frame)
@@ -127,7 +128,10 @@ def run(filename):
             args = command['args']
             knob_value = 1
             if c=='mesh':
-                makeMesh(tmp,args[0])
+                print(c)
+                #print(c, args)
+                print(args[0])
+                makeMesh(tmp,command['cs'])
                 matrix_mult( stack[-1], tmp )
                 if command['constants']:
                     reflect=command['constants']
