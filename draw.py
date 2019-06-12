@@ -104,7 +104,7 @@ def makeMesh(polygons,meshFile):
         p2=masterCoord[polygon[2]]
         add_polygon(polygons,p0[0], p0[1],p0[2], p1[0], p1[1], p1[2], p2[0],p2[1],p2[2])
 
-def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect):
+def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect,shading='default'):
     if len(polygons) < 2:
         print 'Need at least 3 points to draw'
         return
@@ -117,8 +117,12 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
         #print normal
         if normal[2] > 0:
             #print(light['location'])
-            color = get_lighting(normal, view, ambient, light, symbols, reflect )
-            scanline_convert(polygons, point, screen, zbuffer, color)
+            if shading='default':
+                color = get_lighting(normal, view, ambient, light, symbols, reflect )
+                scanline_convert(polygons, point, screen, zbuffer, color)
+            elif shading='phong':
+                color = get_lighting(normal, view, ambient, light, symbols, reflect )
+                scanline_convert(polygons, point, screen, zbuffer, color)
 
             # draw_line( int(polygons[point][0]),
             #            int(polygons[point][1]),

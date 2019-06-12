@@ -22,7 +22,7 @@ SPECULAR_EXP = 4
 
 #lighting functions
 def get_lighting(normal, view, ambient, light, symbols, reflect ):
-    print(light)
+    #print(light)
     n = normal[:]
     normalize(n)
     #normalize(light[LOCATION])
