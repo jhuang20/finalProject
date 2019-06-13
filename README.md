@@ -2,9 +2,9 @@
 James Huang, pd. 4
 ## features (in order of importance)
 1. point light source(DONE)
-2. loop through all lights and calculate specular and differential reflection(DONE)
-3. set knobs(NOT STARTED-THURS)
-4. paste mesh file(DONE)
+2. paste mesh file(DONE)
+3. shading (not phong, but enhanced. Draws each individual scanline based on interpolated surface normal based on vertex normals.)
 ### features i hope to add
-5. shading (phong)(IN PROGRESS-WEDS)
-6. modify vary behavior(add physics)(IN PROGRESS-FRI)
+4. set knobs
+### this isn't happening
+6. modify vary behavior(add physics)
