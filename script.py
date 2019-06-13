@@ -118,6 +118,7 @@ def run(filename):
         screen = new_screen()
         zbuffer = new_zbuffer()
         tmp = []
+        master=[]
         step_3d = 50
         consts = ''
         coords = []
@@ -130,6 +131,7 @@ def run(filename):
             if c=='shading':
                 #print(command['cs'])
                 if command['shade_type']:
+                    print(tmp)
                     draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,command['shade_type'])
                 else:
                     pass

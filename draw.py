@@ -15,17 +15,17 @@ def draw_scanline(x0, z0, x1, z1, y, screen, zbuffer, color):
     z = z0
     delta_z = (z1 - z0) / (x1 - x0 + 1) if (x1 - x0 + 1) != 0 else 0
 
-    while x <= x1:
+    while x <= x1:#phong shading is line by line, so calculate normal for each line to the light?
         plot(screen, zbuffer, color, x, y, z)
         x+= 1
         z+= delta_z
 
-def scanline_convert(polygons, i, screen, zbuffer, color):
+def scanline_convert(polygons, i, screen, zbuffer, color,shading='deafult',dict_normal=''):
     flip = False
     BOT = 0
     TOP = 2
     MID = 1
-
+    #normal = calculate_normal(polygons, i)[:]
     points = [ (polygons[i][0], polygons[i][1], polygons[i][2]),
                (polygons[i+1][0], polygons[i+1][1], polygons[i+1][2]),
                (polygons[i+2][0], polygons[i+2][1], polygons[i+2][2]) ]
@@ -46,7 +46,12 @@ def scanline_convert(polygons, i, screen, zbuffer, color):
     distance0 = int(points[TOP][1]) - y * 1.0 + 1
     distance1 = int(points[MID][1]) - y * 1.0 + 1
     distance2 = int(points[TOP][1]) - int(points[MID][1]) * 1.0 + 1
-
+    if shading=='phong':
+        print('test')
+        normal1=dict_normal[points[BOT]]
+        normal2=dict_normal[points[MID]]
+        normal3=dict_normal[points[TOP]]
+        #normal=((1-((points[MID][1]-y)/(points[MID][1]-points[BOT][1]))*normal1+((points[MID][1]-y)/(points[MID][1]-points[BOT][1]))*normal2)
     dx0 = (points[TOP][0] - points[BOT][0]) / distance0 if distance0 != 0 else 0
     dz0 = (points[TOP][2] - points[BOT][2]) / distance0 if distance0 != 0 else 0
     dx1 = (points[MID][0] - points[BOT][0]) / distance1 if distance1 != 0 else 0
@@ -62,6 +67,11 @@ def scanline_convert(polygons, i, screen, zbuffer, color):
             z1 = points[MID][2]
 
         #draw_line(int(x0), y, z0, int(x1), y, z1, screen, zbuffer, color)
+        if shading=='phong':
+            normal=((1-((points[MID][1]-y)/(points[MID][1]-points[BOT][1]))*normal1+((points[MID][1]-y)/(points[MID][1]-points[BOT][1]))*normal2))
+            if flip is True:
+                normal=((1-((points[TOP][1]-y)/(points[TOP][1]-points[MID][1]))*normal1+((points[TOP][1]-y)/(points[TOP][1]-points[MID][1]))*normal2))
+            color=get_lighting(normal, view, ambient, light, symbols, reflect )
         draw_scanline(int(x0), z0, int(x1), z1, y, screen, zbuffer, color)
         x0+= dx0
         z0+= dz0
@@ -105,24 +115,33 @@ def makeMesh(polygons,meshFile):
         add_polygon(polygons,p0[0], p0[1],p0[2], p1[0], p1[1], p1[2], p2[0],p2[1],p2[2])
 
 def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect,shading='default'):
+    dict_normal={}
     if len(polygons) < 2:
         print 'Need at least 3 points to draw'
         return
-
     point = 0
+    print('p')
+    if shading=='phong':
+        while point < len(polygons) - 2:
+
+            normal = calculate_normal(polygons, point)[:]
+            if shading=='phong':#calculate vertex normals
+                if dict_normal[polygons[point]] is None:
+                    dict_normal[polygons[point]]=normal
+                else:
+                    dict_normal[polygons[point]]=[dict_normal[polygons[point]][0]+normal[0],dict_normal[polygons[point]][1]+normal[1],dict_normal[polygons[point][2]]+normal[2]]
+            point+= 3
     while point < len(polygons) - 2:
 
         normal = calculate_normal(polygons, point)[:]
-
-        #print normal
         if normal[2] > 0:
             #print(light['location'])
-            if shading='default':
+            if shading=='default':
                 color = get_lighting(normal, view, ambient, light, symbols, reflect )
                 scanline_convert(polygons, point, screen, zbuffer, color)
-            elif shading='phong':
+            elif shading=='phong':
                 color = get_lighting(normal, view, ambient, light, symbols, reflect )
-                scanline_convert(polygons, point, screen, zbuffer, color)
+                scanline_convert(polygons, point, screen, zbuffer, color,shading,dict_normal)
 
             # draw_line( int(polygons[point][0]),
             #            int(polygons[point][1]),
