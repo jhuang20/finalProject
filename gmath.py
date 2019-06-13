@@ -57,9 +57,9 @@ def calculate_diffuse(light, reflect, normal):
         dot = dot_product( ref['location'], normal)
 
         dot = dot if dot > 0 else 0
-        d[RED] = ref[COLOR][RED] * reflect['red'][DIFFUSE] * dot
-        d[GREEN] = ref[COLOR][GREEN] * reflect['green'][DIFFUSE] * dot
-        d[BLUE] = ref[COLOR][BLUE] * reflect['blue'][DIFFUSE] * dot
+        d[RED] += ref[COLOR][RED] * reflect['red'][DIFFUSE] * dot
+        d[GREEN] += ref[COLOR][GREEN] * reflect['green'][DIFFUSE] * dot
+        d[BLUE] += ref[COLOR][BLUE] * reflect['blue'][DIFFUSE] * dot
     return d
 
 def calculate_specular(light, reflect, view, normal):
@@ -77,9 +77,9 @@ def calculate_specular(light, reflect, view, normal):
         result = result if result > 0 else 0
         result = pow( result, SPECULAR_EXP )
 
-        s[RED] = ref[COLOR][RED] * reflect['red'][SPECULAR] * result
-        s[GREEN] = ref[COLOR][GREEN] * reflect['green'][SPECULAR] * result
-        s[BLUE] = ref[COLOR][BLUE] * reflect['blue'][SPECULAR] * result
+        s[RED] += ref[COLOR][RED] * reflect['red'][SPECULAR] * result
+        s[GREEN] += ref[COLOR][GREEN] * reflect['green'][SPECULAR] * result
+        s[BLUE] += ref[COLOR][BLUE] * reflect['blue'][SPECULAR] * result
     return s
 
 def limit_color(color):

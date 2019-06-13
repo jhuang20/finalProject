@@ -70,6 +70,7 @@ def run(filename):
     """
     This function runs an mdl script
     """
+    shading='default'
     p = mdl.parseFile(filename)
     lights={}
     if p:
@@ -131,8 +132,9 @@ def run(filename):
             if c=='shading':
                 #print(command['cs'])
                 if command['shade_type']:
-                    print(tmp)
-                    draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,command['shade_type'])
+                    #print(tmp)
+                    shading=command['shade_type']
+                    #draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,command['shade_type'])
                 else:
                     pass
             elif c=='mesh':
@@ -143,13 +145,13 @@ def run(filename):
                 matrix_mult( stack[-1], tmp )
                 if command['constants']:
                     reflect=command['constants']
-                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,shading)
             elif c == 'box':
                 if command['constants']:
                     reflect = command['constants']
                 add_box(tmp,args[0], args[1], args[2],args[3], args[4], args[5])
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,shading)
                 tmp = []
                 reflect = '.white'
             elif c == 'sphere':
@@ -158,7 +160,7 @@ def run(filename):
                 add_sphere(tmp,
                                args[0], args[1], args[2], args[3], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,shading)
                 tmp = []
                 reflect = '.white'
             elif c == 'torus':
@@ -166,7 +168,7 @@ def run(filename):
                     reflect = command['constants']
                 add_torus(tmp,args[0], args[1], args[2], args[3], args[4], step_3d)
                 matrix_mult( stack[-1], tmp )
-                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect)
+                draw_polygons(tmp, screen, zbuffer, view, ambient, lights, symbols, reflect,shading)
                 tmp = []
                 reflect = '.white'
             elif c == 'line':

@@ -108,7 +108,7 @@ def makeMesh(polygons,meshFile):
             temp.append(poly)
         counter+=1
     for polygon in temp:
-        print(polygon)
+        #print(polygon)
         p0=masterCoord[polygon[0]]
         p1=masterCoord[polygon[1]]
         p2=masterCoord[polygon[2]]
@@ -120,7 +120,7 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
         print 'Need at least 3 points to draw'
         return
     point = 0
-    print('p')
+    #print('p')
     if shading=='phong':
         while point < len(polygons) - 2:
 
