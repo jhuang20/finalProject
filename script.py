@@ -120,7 +120,7 @@ def run(filename):
         zbuffer = new_zbuffer()
         tmp = []
         master=[]
-        step_3d = 50
+        step_3d = 600
         consts = ''
         coords = []
         coords1 = []

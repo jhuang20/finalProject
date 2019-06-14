@@ -2,15 +2,19 @@
 constants shiny_purple 0.3 0.2 0.8 0.3 0 0 0.3 0.2 0.8
 constants shiny_teal 0.3 0.0 0.0 0.3 0.2 0.8 0.3 0.2 0.8
 constants dull_yellow 0.3 0.8 0.2 0.3 0.8 0.2 0 0 0
+//shading phong
 push
-move 250 250 0
-light james 255 0 0 500 250 100
-light sam 0 0 255 0 250 100
+move 200 200 0
+//scale 100 100 100
+light james 255 0 255 255 255 0
+light sam -255 700 255 0 250 100
+//mesh shiny_purple :teapot
 sphere shiny_purple -100 150 0 80
 sphere shiny_teal 100 150 0 80
 push
-rotate x 45
-rotate y 45
+//rotate x 45
+//rotate y 45
+light james 255 0 255 -20 60 60
 box -40 40 40 80 80 80
 pop
 push
@@ -18,6 +22,6 @@ move 0 -150 0
 rotate x 30
 scale 1 1 0.5
 torus dull_yellow 0 0 0 30 175
-shading phong
+//shading phong
 display
 save face.png
