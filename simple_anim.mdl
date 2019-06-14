@@ -6,6 +6,7 @@ move 250 250 0
 light l0 255 0 0 510 510 600
 light l1 0 0 255 0 0 600
 //light l2 0 255 0 400 -300 300
+//tween 20 30  knoblist1
 constants shiny_purple 0.2 0.3 0.7 0.0 0.0 0.0 0.0 0.3 0.7
 constants matte_purple 0.2 0.7 0.3 0.0 0.0 0.0 0.0 0.7 0.3
 scale 100 100 100

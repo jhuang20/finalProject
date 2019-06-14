@@ -49,7 +49,7 @@ def second_pass( commands, num_frames ):
     frames = [{} for i in range(int(num_frames)) ]
     for command in commands:
         print(command)
-        if command['op']=="set":
+        if command['op']=="tween":
             knob=command['knob']
             args = command['args']
             print(args)
@@ -106,10 +106,11 @@ def run(filename):
     for cmd in symbols:
         if symbols[cmd][0]=='light':
             lights[cmd]=symbols[cmd][1]
+            #print(lights[cmd])
     (name, num_frames) = first_pass(commands)
     frames = second_pass(commands, num_frames)
     (lights, ambient)=lights,[255,255,255]
-    #print(lights)
+    print(lights)
     i = 0
     for frame in frames:
         symbols.update(frame)
@@ -120,7 +121,7 @@ def run(filename):
         zbuffer = new_zbuffer()
         tmp = []
         master=[]
-        step_3d = 600
+        step_3d = 100
         consts = ''
         coords = []
         coords1 = []

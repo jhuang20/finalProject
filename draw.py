@@ -27,7 +27,7 @@ def scanline_convert(polygons, i, screen, zbuffer, color,shading='default',dict_
     TOP = 2
     MID = 1
     #print(light)
-    #normal = calculate_normal(polygons, i)[:]
+    normal = calculate_normal(polygons, i)[:]
     points = [ (polygons[i][0], polygons[i][1], polygons[i][2]),
                (polygons[i+1][0], polygons[i+1][1], polygons[i+1][2]),
                (polygons[i+2][0], polygons[i+2][1], polygons[i+2][2]) ]
@@ -49,26 +49,24 @@ def scanline_convert(polygons, i, screen, zbuffer, color,shading='default',dict_
     normal3=calculate_normal(polygons, i)[:]
     distance0 = int(points[TOP][1]) - y * 1.0 + 1
     distance1 = int(points[MID][1]) - y * 1.0 + 1
-    counter=1
-    #print('huh')
     distance2 = int(points[TOP][1]) - int(points[MID][1]) * 1.0 + 1
     if shading=='phong':
         #print('test')
-        try:
-            normalize(dict_normal[tuple([round(i,4) for i in polygons[BOT][:3]])])
-            normal1=dict_normal[tuple([round(i,4) for i in polygons[BOT][:3]])]
-        except:
-            pass
-        try:
-            normalize(dict_normal[tuple([round(i,4) for i in polygons[MID][:3]])])
-            normal2=dict_normal[tuple([round(i,4) for i in polygons[MID][:3]])]
-        except:
-            pass
-        try:
-            normalize(dict_normal[tuple([round(i,4) for i in polygons[TOP][:3]])])
-            normal3=dict_normal[tuple([round(i,4) for i in polygons[TOP][:3]])]
-        except:
-            pass
+        #try:
+        normal1=dict_normal[tuple([round(i,4) for i in polygons[BOT][:3]])]
+            #print(normal1)
+        #except:
+        #    pass
+        #try:
+        normal2=dict_normal[tuple([round(i,4) for i in polygons[MID][:3]])]
+            #print(normal2,normal)
+        #except:
+        #    pass
+        #try:
+        normal3=dict_normal[tuple([round(i,4) for i in polygons[TOP][:3]])]
+            #print(normal3)
+        #except:
+        #    pass
         #normal1=dict_normal[tuple([round(i,4) for i in polygons[BOT][:3]])]
         #normal2=dict_normal[tuple([round(i,4) for i in polygons[MID][:3]])]
         #normal3=dict_normal[tuple([round(i,4) for i in polygons[TOP][:3]])]
@@ -87,17 +85,17 @@ def scanline_convert(polygons, i, screen, zbuffer, color,shading='default',dict_
             dz1 = (points[TOP][2] - points[MID][2]) / distance2 if distance2 != 0 else 0
             x1 = points[MID][0]
             z1 = points[MID][2]
-            counter=1
+            #counter=1
 
         #draw_line(int(x0), y, z0, int(x1), y, z1, screen, zbuffer, color)
         if shading=='phong':
             view=[0,0,1]
             ambient=[50,50,50]
             if flip is False:
-                normal=[(((points[MID][1]-y)/distance1)*normal1[i]+(1-((points[MID][1]-y)/distance1))*normal2[i])+(((points[TOP][1]-y)/distance0)*normal1[i]+(1-((points[TOP][1]-y)/distance0))*normal3[i]) for i in range(3)]
+                normal=[(((y-points[MID][1])/distance1)*normal1[i]+(1-((y-points[MID][1])/distance1))*normal2[i])+(((y-points[TOP][1])/distance0)*normal1[i]+(1-((y-points[TOP][1])/distance0))*normal3[i]) for i in range(3)]
             if flip is True:
-                normal=[(((points[TOP][1]-y)/distance2)*normal2[i]+(1-((points[TOP][1]-y)/distance2))*normal3[i]+((points[TOP][1]-y)/distance0)*normal1[i]+(1-((points[TOP][1]-y)/distance0))*normal3[i]) for i in range(3)]
-            if normal[0]*normal[1]*normal[2]==0: print normal
+                normal=[(((y-points[TOP][1])/distance2)*normal2[i]+(1-((y-points[TOP][1])/distance2))*normal3[i]+((y-points[TOP][1])/distance0)*normal1[i]+(1-((y-points[TOP][1])/distance0))*normal3[i]) for i in range(3)]
+            #if normal[0]*normal[1]*normal[2]==0: print normal
             #print(light)
             color=get_lighting(normal, view, ambient, light, symbols, reflect )
             #print(color)
@@ -105,12 +103,12 @@ def scanline_convert(polygons, i, screen, zbuffer, color,shading='default',dict_
         x0+= dx0
         z0+= dz0
         x1+= dx1
-        print('checkpoint 2')
+        #print('checkpoint 2')
         z1+= dz1
         y+= 1
-        counter+=1
+        #counter+=1
     #print(str(polycounter)+' polygon done')
-    polycounter+=1
+    #polycounter+=1
 
 
 
@@ -150,7 +148,7 @@ def makeMesh(polygons,meshFile):
 def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, reflect,shading='default'):
     dict_normal={}
     ref={}#calculates average!
-    print('there are '+str(len(polygons))+' polygons')
+    #print('there are '+str(len(polygons))+' polygons')
     if len(polygons) < 2:
         print 'Need at least 3 points to draw'
         return
@@ -160,9 +158,17 @@ def draw_polygons( polygons, screen, zbuffer, view, ambient, light, symbols, ref
     if shading=='phong':
         while point < len(polygons) - 2:
             #print('phong')
-            normal = calculate_normal(polygons, point)[:]
+            #normalize(normal)
             if shading=='phong':#calculate vertex normals
+                #if point%3==0:
+                normal = calculate_normal(polygons, point)[:]
+                print(normal)
                 try:
+                    normalize(normal)
+                except:
+                    normal=[0,0,0]
+                try:
+                    #normalize(normal)
                     #dict_normal[tuple([round(i,4) for i in polygons[point][:3]])]== None:
                     dict_normal[tuple([round(i,4) for i in polygons[point][:3]])]=[dict_normal[tuple([round(i,4) for i in polygons[point]])][0]+normal[0],dict_normal[tuple([round(i,4) for i in polygons[point]])][1]+normal[1],dict_normal[tuple([round(i,4) for i in polygons[point]])][2]+normal[2]]
                     ref[tuple([round(i,4) for i in polygons[point][:3]])]+=1
