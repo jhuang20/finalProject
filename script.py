@@ -48,11 +48,13 @@ def first_pass( commands ):
 def second_pass( commands, num_frames ):
     frames = [{} for i in range(int(num_frames)) ]
     for command in commands:
-        print(command)
-        if command['op']=="tween":
-            knob=command['knob']
+        #print(command)
+        if command['op']=="set":
             args = command['args']
+            knob= command['knob']
+            #print(symbols[command['knob']])
             print(args)
+            print(knob)
             #sinit=args[1]
             #print(knob, args, init)
         if command['op'] == "vary":
@@ -103,14 +105,19 @@ def run(filename):
                           'blue': [0.2, 0.5, 0.5]}]
     reflect = '.white'
     lights={}
+    ambient=[]
     for cmd in symbols:
         if symbols[cmd][0]=='light':
             lights[cmd]=symbols[cmd][1]
             #print(lights[cmd])
+        if symbols[cmd][0]=='ambient':
+            print(symbols[cmd])
+            ambient=[int(i) for i in symbols[cmd][1:]]
     (name, num_frames) = first_pass(commands)
     frames = second_pass(commands, num_frames)
-    (lights, ambient)=lights,[255,255,255]
+    (lights, ambient)=lights,ambient
     print(lights)
+    print(ambient)
     i = 0
     for frame in frames:
         symbols.update(frame)
@@ -182,6 +189,7 @@ def run(filename):
                 v=1
                 if command['knob'] is not None:
                     v = symbols[command['knob']]
+                    print(symbols[command['knob']])
                 tmp = make_translate(args[0] * v, args[1] * v, args[2] * v)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
@@ -190,6 +198,7 @@ def run(filename):
                 v=1
                 if command['knob'] is not None:
                     v = symbols[command['knob']]
+                    print(symbols[command['knob']])
                 tmp = make_scale(args[0] * v, args[1] * v, args[2] * v)
                 matrix_mult(stack[-1], tmp)
                 stack[-1] = [x[:] for x in tmp]
@@ -198,6 +207,7 @@ def run(filename):
                 v=1
                 if command['knob'] is not None:
                     v = symbols[command['knob']]
+                    print(symbols[command['knob']])
                 theta = args[1] * (math.pi/180)
                 if args[0] == 'x':
                     tmp = make_rotX(theta*v)

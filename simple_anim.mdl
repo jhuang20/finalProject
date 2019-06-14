@@ -1,10 +1,12 @@
 frames 50
 basename simple_50
-shading phong
+//shading phong
 push
 move 250 250 0
+//set bigenator 0.8
 light l0 255 0 0 510 510 600
 light l1 0 0 255 0 0 600
+ambient 200 200 0
 //light l2 0 255 0 400 -300 300
 //tween 20 30  knoblist1
 constants shiny_purple 0.2 0.3 0.7 0.0 0.0 0.0 0.0 0.3 0.7
@@ -13,7 +15,8 @@ scale 100 100 100
 rotate y 360 spinny
 rotate z 360 spinny
 mesh shiny_purple :teapot
-set bigenator 0.8
+//set bigenator 0.8
 vary spinny 0 49 0 1
 vary bigenator 0 24 0 1
 vary bigenator 25 49 1 0
+//set spinny 0.5

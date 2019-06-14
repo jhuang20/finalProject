@@ -1,8 +1,8 @@
 # finalProject
 James Huang, pd. 4
 ## features I will have added
-1. point light source(DONE)
+1. multiple point light sources(DONE)
+  light x y z r g b
+  ambient r g b
 2. paste mesh file(DONE)
-3. shading (not phong, but enhanced. Draws each individual scanline based on interpolated surface normal based on vertex normals.)
-  shading phong
-  shading enhanced
+  mesh constant :object_file
